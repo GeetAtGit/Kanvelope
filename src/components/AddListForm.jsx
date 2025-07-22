@@ -1,3 +1,4 @@
+// src/components/AddListForm.jsx
 import React, { useState } from 'react';
 
 const AddListForm = ({ onAdd }) => {
@@ -6,27 +7,25 @@ const AddListForm = ({ onAdd }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onAdd(title);
+    onAdd(title.trim());
     setTitle('');
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-64 min-w-[16rem] bg-white p-4 rounded shadow"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col">
       <input
         type="text"
-        className="w-full px-2 py-1 border rounded mb-2"
-        placeholder="New list title"
+        className="w-full px-3 py-2 border rounded mb-4 focus:outline-none focus:ring"
+        placeholder="List title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        autoFocus
       />
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-1 rounded hover:bg-blue-700"
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
       >
-        Add List
+        Create List
       </button>
     </form>
   );

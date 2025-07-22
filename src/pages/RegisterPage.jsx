@@ -4,6 +4,10 @@ import { auth, db } from '../config/firebase.js';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate, Link } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
+
+
+
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
