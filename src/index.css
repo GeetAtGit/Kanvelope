@@ -1,0 +1,19 @@
+/* Pull in Tailwind’s entire generated stylesheet */
+@import "tailwindcss";
+
+/* Now define your variables globally */
+@theme {
+  --color-softGreen:   #86A788;
+  --color-cream: #FFFDEC;
+  --color-lightPink:    #FFE2E2;
+  --color-coral:     #FFCFCF;
+}
+
+/* (Optional) Your own base resets */
+@layer base {
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    background-color: var(--color-secondary);
+  }
+}
