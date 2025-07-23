@@ -1,5 +1,5 @@
 // src/components/CardModal.jsx
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { X, Trash2, Loader2 } from 'lucide-react';
 import DatePicker from 'react-datepicker';
@@ -18,6 +18,7 @@ const CLOUD_NAME    = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 const CardModal = ({ isOpen, card, onClose, onSave, onDelete }) => {
+  const fileInputRef = useRef(null);
 
    console.log('Cloudinary config:', { CLOUD_NAME, UPLOAD_PRESET });
  
@@ -178,8 +179,22 @@ const CardModal = ({ isOpen, card, onClose, onSave, onDelete }) => {
                         </li>
                       ))}
                     </ul>
-                    <input type="file" multiple onChange={handleFileChange} className="w-full text-sm mb-4" />
-                    {newFiles.length > 0 && (
+              {/* Hidden native file input */}
+               <input
+                 ref={fileInputRef}
+                 type="file"
+                multiple
+                 onChange={handleFileChange}
+                 className="hidden"
+               />
+               {/* Styled button to trigger file chooser */}
+               <button
+                 type="button"
+                 onClick={() => fileInputRef.current.click()}
+                 className="mb-4 px-3 py-1.5 bg-gray-200 hover:bg-gray-300 rounded text-sm"
+               >
+                 Add Attachments
+               </button>                    {newFiles.length > 0 && (
                       <ul className="mb-3 space-y-1 text-xs">
                         {newFiles.map(f => <li key={f.name}>{f.name}</li>)}
                       </ul>

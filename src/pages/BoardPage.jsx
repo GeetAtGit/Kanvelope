@@ -17,16 +17,44 @@ import { db } from '../config/firebase';
 import AddListForm from '../components/AddListForm';
 import AddCardForm from '../components/AddCardForm';
 import CardModal from '../components/CardModal';
+import ListModal  from '../components/ListModal';
+import BoardModal from '../components/BoardModal';
+
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Pencil, Plus, X } from 'lucide-react';
 
 const BoardPage = () => {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
+  const [modalBoard, setModalBoard] = useState(null);
+
   const [lists, setLists] = useState([]);
   const [cardsByList, setCardsByList] = useState({});
   const [modalCard, setModalCard] = useState(null);
+  const [modalList, setModalList] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Rename this board
+const handleSaveBoard = async (updated) => {
+  await updateDoc(doc(db, 'boards', updated.id), { title: updated.title });
+  fetchBoardAndLists();
+  setModalBoard(null);
+};
+
+// Delete this board (and its lists/cards)
+const handleDeleteBoard = async (boardId) => {
+  // delete all lists + cards under the board
+  const listsSnap = await getDocs(query(collection(db,'lists'), where('boardId','==',boardId)));
+  await Promise.all(listsSnap.docs.map(l => deleteDoc(doc(db,'lists',l.id))));
+  const cardsSnap = await getDocs(query(collection(db,'cards'), where('boardId','==',boardId)));
+  await Promise.all(cardsSnap.docs.map(c => deleteDoc(doc(db,'cards',c.id))));
+  // delete the board itself
+  await deleteDoc(doc(db, 'boards', boardId));
+  // redirect back to dashboard
+  window.location.href = '/dashboard'; 
+};
+
+
 
   // ← new: controls Add-List modal visibility
   const [showAddListModal, setShowAddListModal] = useState(false);
@@ -181,13 +209,56 @@ const BoardPage = () => {
   if (loading) return <p className="p-6">Loading board...</p>;
   if (!board)  return <p className="p-6 text-red-600">Board not found</p>;
 
+  // Save an edited list title
+const handleSaveList = async (updatedList) => {
+  await updateDoc(
+    doc(db, 'lists', updatedList.id),
+    { title: updatedList.title }
+  );
+  fetchBoardAndLists();
+};
+
+// Delete a list *and* all its cards
+const handleDeleteList = async (listId) => {
+  // 1) delete the list
+  await deleteDoc(doc(db, 'lists', listId));
+
+  // 2) delete cards in that list
+  const cardSnap = await getDocs(
+    query(collection(db, 'cards'), where('listId', '==', listId))
+  );
+  await Promise.all(
+    cardSnap.docs.map(d => deleteDoc(doc(db, 'cards', d.id)))
+  );
+
+  fetchBoardAndLists();
+};
+
+const borderClasses = [
+  'border-red-400/50',
+  'border-green-400/50',
+  'border-blue-400/50',
+  'border-yellow-400/50',
+  'border-purple-400/50',
+];
+
+
   return (
     <div className="px-2 sm:px-6 py-4">
       {/* ——— Header with Add-List button ——— */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl sm:text-3xl font-bold">
-          {board.title}
-        </h1>
+        <h1 className="text-xl sm:text-3xl font-bold flex items-center gap-2">
+    {board.title}
+    <button
+      onClick={() => setModalBoard(board)}
+      className="text-gray-500 hover:text-gray-700 p-1"
+      title="Edit board"
+    >
+      <Pencil size={18} />
+    </button>
+  </h1>
+
+        
         <button
           onClick={() => setShowAddListModal(true)}
           className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700"
@@ -202,7 +273,7 @@ const BoardPage = () => {
         <Droppable droppableId="board" type="list" direction="horizontal">
           {(provided) => (
             <div
-              className="flex flex-col sm:flex-row gap-4 w-full overflow-x-auto"
+              className="flex flex-col sm:flex-row gap-4 w-full overflow-x-auto justify-center"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -213,9 +284,29 @@ const BoardPage = () => {
                       ref={prov.innerRef}
                       {...prov.draggableProps}
                       {...prov.dragHandleProps}
-                      className="w-full sm:min-w-[16rem] sm:w-64 flex-shrink-0 bg-white p-4 rounded shadow"
+                    className={`w-full sm:min-w-[18rem] sm:w-64 flex-shrink-0 bg-white p-4 rounded shadow border-2 ${borderClasses[idx % borderClasses.length]}`}
                     >
-                      <h2 className="font-semibold text-lg mb-2">{list.title}</h2>
+                     <div className="flex items-center justify-between mb-2">
+                <h2 className="font-semibold text-lg">{list.title}</h2>
+
+                
+               <button
+                 onClick={() => setModalList(list)}
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded"
+                 title="Edit list"
+                >
+                  <Pencil size={16}/>
+                </button>
+
+                <ListModal
+                  isOpen={!!modalList}
+                  list={modalList}
+                  onClose={() => setModalList(null)}
+                  onSave={handleSaveList}
+                  onDelete={handleDeleteList}
+                />
+
+              </div>
 
                       <Droppable droppableId={list.id} type="card">
                         {(prov2) => (
@@ -250,10 +341,13 @@ const BoardPage = () => {
                                       </p>
                                     )}
                                     {card.attachments.length > 0 && (
-                                      <p className="text-xs text-blue-500">
-                                        📎 {card.attachments.length}
-                                      </p>
+                                      <ul className="text-xs text-blue-500 list-disc list-inside">
+                                        {card.attachments.map(a => (
+                                          <li key={a.id} className="truncate">{a.name}</li>
+                                        ))}
+                                      </ul>
                                     )}
+
                                     <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition">
                                       <button
                                         onClick={(e) => {
@@ -299,6 +393,20 @@ const BoardPage = () => {
           handleDeleteCard(id);
         }}
       />
+
+      <BoardModal
+        isOpen={!!modalBoard}
+        board={modalBoard}
+        onClose={() => setModalBoard(null)}
+        onSave={handleSaveBoard}
+        onDelete={handleDeleteBoard}
+      />
+
+      
+
+      
+
+      
 
       {/* ——— New: Add List Modal using Headless UI ——— */}
       <Transition appear show={showAddListModal} as={Fragment}>
