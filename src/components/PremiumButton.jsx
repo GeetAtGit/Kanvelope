@@ -15,7 +15,7 @@ export default function PremiumButton() {
         transition
       "
     >
-      Unlock Premium ₹499
+      Unlock Premium ₹999
     </a>
   );
 }

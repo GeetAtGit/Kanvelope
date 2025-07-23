@@ -257,7 +257,7 @@ export default function LandingPage() {
     {/* Floating Pricing Card */}
     <div className="inline-block bg-white bg-opacity-20 backdrop-blur-md rounded-xl p-8 mb-8 transform transition hover:scale-105">
       <div className="flex justify-center items-baseline mb-4">
-        <span className="text-6xl font-extrabold text-black">₹499</span>
+        <span className="text-6xl font-extrabold text-black">₹999</span>
         <span className="text-black text-xl ml-2">/ year</span>
       </div>
       <ul className="text-black space-y-3">
