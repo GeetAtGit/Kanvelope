@@ -1,6 +1,6 @@
 # Kanvelope 📬✨
 
-> A playful, responsive Kanban board built with React, Tailwind CSS & Firebase! 🎉
+> **Kanvelope** is your go‐to playful Kanban board for personal and team productivity! Organize tasks in draggable lists, collaborate in real time with rich card details (descriptions, assignees, due dates, attachments), and upgrade to Premium for even more power. Built with React, Tailwind CSS & Firebase, Kanvelope makes work feel fun and fluid—no more lost sticky notes or forgotten deadlines! 🚀📋🎨
 
 ---
 ### Live Demo
@@ -17,8 +17,12 @@
 - ➕ **Dynamic Lists & Cards**  
   - Drag-and-drop between columns 📦➡️📋  
   - Inline edit & delete modals with backdrop blur 🌫️🖊️  
-  - Custom per-column borders & adjustable widths 🎨
-
+  - Custom per-column borders & adjustable widths 🎨  
+  - **Assign To**: tag tasks to team members 👥  
+  - **Descriptions**: add rich details per card 📝  
+  - **Attachments**: upload images, PDFs, documents 📎  
+  - **Due Dates**: set deadlines and reminders 📅
+    
 - 🔐 **User Authentication**  
   - Email/password sign up & login via Firebase Auth 🔑  
 
@@ -80,6 +84,7 @@
 - Click “Get Started” to create your first board ➕
 - Use the + in the board header to add lists ➗
 - Click the ✏️ on a list or card to edit/delete ✂️
+- Assign cards to users, add descriptions, upload attachments, and set due dates 📋📎📅
 - Drag cards across lists to update their status 🖱️
 - Click “Unlock Premium” in the header to integrate payments 💳
 
