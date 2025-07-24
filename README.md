@@ -46,7 +46,9 @@
 - **Styling**: Tailwind CSS 🎨  
 - **Drag & Drop**: @hello-pangea/dnd 👐  
 - **UI Toolkit**: Headless UI, Lucide Icons 💎  
-- **Backend**: Firebase Firestore & Firebase Auth 🔥  
+- **Backend**: Firebase Firestore & Firebase Auth 🔥
+- **Deployment**: Firebase Hosting 🌍  
+
 
 ---
 
