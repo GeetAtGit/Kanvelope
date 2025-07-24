@@ -25,17 +25,17 @@ const Dashboard = () => {
     setBoards(fetchedBoards);
   };
 
-  const handleAddBoard = async (e) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-    await addDoc(collection(db, 'boards'), {
-      title,
-      ownerId: user.uid,
-      createdAt: new Date()
-    });
-    setTitle('');
-    fetchBoards();
-  };
+  const handleAddBoard = async (title) => {
+  if (!title.trim()) return;
+  await addDoc(collection(db, 'boards'), {
+    title,
+    ownerId: user.uid,
+    createdAt: new Date()
+  });
+  setTitle('');
+  fetchBoards();
+};
+
 
   const handleBoardClick = (id) => {
     navigate(`/boards/${id}`);
@@ -44,7 +44,7 @@ const Dashboard = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-4">Your Boards</h1>
-      <BoardForm title={title} setTitle={setTitle} handleAddBoard={handleAddBoard} />
+      <BoardForm title={title} setTitle={setTitle} onAdd={handleAddBoard} />
       <BoardList boards={boards} onBoardClick={handleBoardClick} />
     </div>
   );

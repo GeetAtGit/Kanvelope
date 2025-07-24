@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title">
+  <title id="title">Kanvelope Logo</title>
+  <!-- Envelope outline -->
+  <rect x="2" y="12" width="60" height="40" rx="4" ry="4" stroke="#333" stroke-width="2" fill="none"></rect>
+  <!-- Envelope flap -->
+  <polyline points="2,12 32,36 62,12" stroke="#333" stroke-width="2" fill="none"></polyline>
+  <!-- Kanban columns -->
+  <rect x="14" y="22" width="8" height="26" rx="1" ry="1" fill="#4ADE80"></rect>
+  <rect x="28" y="18" width="8" height="30" rx="1" ry="1" fill="#60A5FA"></rect>
+  <rect x="42" y="26" width="8" height="22" rx="1" ry="1" fill="#FCD34D"></rect>
+</svg>

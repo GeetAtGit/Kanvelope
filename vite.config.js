@@ -13,4 +13,20 @@ export default defineConfig({
     tailwind(),
 
   ],
+
+  build: {
+    chunkSizeWarningLimit: 1000, // bump the warning limit if you want
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // everything in node_modules/react* goes into "react-vendor.js"
+          'react-vendor': ['react', 'react-dom'],
+          // firebase and related libs
+          'firebase-vendor': ['firebase/app', 'firebase/firestore', 'firebase/auth'],
+          // your big UI libs
+          'ui-vendor': ['@hello-pangea/dnd', '@headlessui/react', 'lucide-react'],
+        }
+      }
+    }
+  }
 });

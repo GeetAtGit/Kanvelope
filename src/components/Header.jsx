@@ -6,6 +6,7 @@ import { auth } from '../config/firebase';
 import { useAuth } from '../context/AuthContext';
 import PremiumButton from '../components/PremiumButton';
 import { Menu, X } from 'lucide-react';
+import logo from '../assets/logo.svg';
 
 const Header = () => {
   const navigate    = useNavigate();
@@ -28,8 +29,9 @@ const Header = () => {
     <header className="bg-softGreen text-cream px-6 py-4 shadow">
       {/* top row: brand + hamburger + desktop nav */}
       <div className="flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold hover:text-coral">
-          Kanvelope
+        <Link to="/" className="flex items-center space-x-2 hover:text-coral">
+          <img src={logo} alt="Logo" className="h-8 w-8 object-contain" />
+          <span className="text-2xl font-bold">Kanvelope</span>
         </Link>
 
         {/* desktop nav */}
